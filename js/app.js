@@ -17,8 +17,16 @@
  * Define Global Variables
  * 
 */
+let navbarList = document.getElementById("navbar__list");
+let mainHeros = document.getElementsByClassName("main__hero");
+let section_1 = document.getElementById("section1");
+let section_2 = document.getElementById("section2");
+let section_3 = document.getElementById("section3");
 
+let dataNav = document.getAttribute("data-nav");
 
+let activeclasses = document.getElementsByClassName("your-active-class");
+let landingContainers = document.getElementsByClassName("landing__container");
 /**
  * End Global Variables
  * Start Helper Functions
