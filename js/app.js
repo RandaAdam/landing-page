@@ -32,8 +32,25 @@ let landingContainers = document.getElementsByClassName("landing__container");
  * Start Helper Functions
  * 
 */
+function isInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
 
+function addClassActive(secPart){
+    //secPart.setAttribute("class", "your-active-class");
+    secPart.classList.add("your-active-class");
+}
 
+function removeClassActive(secPart){
+    //secPart.setAttribute("class", "");
+    secPart.classList.remove("your-active-class");
+}
 
 /**
  * End Helper Functions
@@ -51,9 +68,15 @@ function buildTheNav(){
         let secString = "section" + (i+1).toString();
         let sec = document.getElementById(secString);
         let dataNav = sec.getAttribute("data-nav");
-        newLi.appendChild(document.createTextNode(dataNav));
+        //newLi.innerHTML = "<a href=\"\">" + dataNav + "</a>";
+        newLi.innerHTML = "<a href=#\"" + secString + "\">" + dataNav + "</a>";
+        //newLi.setAttribute("href", "#"+ secString);
+        //newLi.appendChild(document.createTextNode(dataNav));
         newLi.setAttribute("class", "menu__link");
+        
         navbarList.appendChild(newLi);
+
+        
     }
 }
 
@@ -73,6 +96,7 @@ function buildTheNav(){
 // Build menu 
 buildTheNav();
 // Scroll to section on link click
+
 let menuItemsLinks = document.getElementsByClassName("menu__link");
 for (const itemNo in menuItemsLinks) {
     if (menuItemsLinks.hasOwnProperty(itemNo)) {
@@ -80,11 +104,30 @@ for (const itemNo in menuItemsLinks) {
         menuItem.addEventListener("click", function () {
             let secString = "section" + (Number(itemNo)+1).toString();
             let sec = document.getElementById(secString);
-            sec.scrollIntoView();
+            //sec.scrollIntoView();
+            sec.scrollIntoView(false);
+
+            //newLi.setAttribute("href", "#"+secString);
 
           });
     }
 }
+
 // Set sections as active
-
-
+//Todo: listen to onscroll event
+document.addEventListener('scroll', function () {
+    //loop through sections to append and build nav
+    for (let i=0;i< landingContainers.length ;i++){
+        let secString = "section" + (i+1).toString();
+        let sec = document.getElementById(secString);
+        //check if this section is in viewport
+        if(isInViewport(sec) == true){
+            addClassActive(sec);
+        }
+        else{
+            removeClassActive(sec);
+        }
+    }
+}, {
+    passive: false
+});
