@@ -19,11 +19,6 @@
 */
 let navbarList = document.getElementById("navbar__list");
 let mainHeros = document.getElementsByClassName("main__hero");
-//let section_1 = document.getElementById("section1");
-//let section_2 = document.getElementById("section2");
-//let section_3 = document.getElementById("section3");
-
-//let dataNav = document.getAttribute("data-nav");
 
 let activeclasses = document.getElementsByClassName("your-active-class");
 let landingContainers = document.getElementsByClassName("landing__container");
@@ -42,15 +37,7 @@ function isInViewport(element) {
     );
 }
 
-function addClassActive(secPart){
-    //secPart.setAttribute("class", "your-active-class");
-    secPart.classList.add("your-active-class");
-}
 
-function removeClassActive(secPart){
-    //secPart.setAttribute("class", "");
-    secPart.classList.remove("your-active-class");
-}
 
 /**
  * End Helper Functions
@@ -60,7 +47,6 @@ function removeClassActive(secPart){
 
 // build the nav
 
-//toDO: add Listener to call this function
 function buildTheNav(){
     //loop through sections to append and build nav
     for (let i=0;i< landingContainers.length ;i++){
@@ -68,24 +54,31 @@ function buildTheNav(){
         let secString = "section" + (i+1).toString();
         let sec = document.getElementById(secString);
         let dataNav = sec.getAttribute("data-nav");
-        //newLi.innerHTML = "<a href=\"\">" + dataNav + "</a>";
-        newLi.innerHTML = "<a href=#\"" + secString + "\">" + dataNav + "</a>";
-        //newLi.setAttribute("href", "#"+ secString);
-        //newLi.appendChild(document.createTextNode(dataNav));
-        newLi.setAttribute("class", "menu__link");
-        
-        navbarList.appendChild(newLi);
-
-        
+        newLi.innerHTML = "<a href= #" + secString + ">" + dataNav + "</a>";
+        newLi.className = "menu__link";
+        // Scroll to section on link click
+        newLi.addEventListener("click", function(){
+            sec.scrollIntoView(false);
+        });
+        navbarList.appendChild(newLi);        
     }
 }
 
 
 // Add class 'active' to section when near top of viewport
+function addClassActive(secPart){
+    secPart.classList.add("your-active-class");
+}
+
+function removeClassActive(secPart){
+    secPart.classList.remove("your-active-class");
+}
 
 
 // Scroll to anchor ID using scrollTO event
-
+function scrollToSection (targetSection) {
+    targetSection.scrollIntoView(false);
+}
 
 /**
  * End Main Functions
@@ -94,27 +87,13 @@ function buildTheNav(){
 */
 
 // Build menu 
-buildTheNav();
-// Scroll to section on link click
+window.addEventListener('load', (event) => {
+    buildTheNav();
+  });
 
-let menuItemsLinks = document.getElementsByClassName("menu__link");
-for (const itemNo in menuItemsLinks) {
-    if (menuItemsLinks.hasOwnProperty(itemNo)) {
-        const menuItem = menuItemsLinks[itemNo];
-        menuItem.addEventListener("click", function () {
-            let secString = "section" + (Number(itemNo)+1).toString();
-            let sec = document.getElementById(secString);
-            //sec.scrollIntoView();
-            sec.scrollIntoView(false);
 
-            //newLi.setAttribute("href", "#"+secString);
-
-          });
-    }
-}
 
 // Set sections as active
-//Todo: listen to onscroll event
 document.addEventListener('scroll', function () {
     //loop through sections to append and build nav
     for (let i=0;i< landingContainers.length ;i++){
@@ -122,10 +101,14 @@ document.addEventListener('scroll', function () {
         let sec = document.getElementById(secString);
         //check if this section is in viewport
         if(isInViewport(sec) == true){
+            for(let j=0;j<landingContainers.length;j++){
+                if(i != j){
+                    let sectionString = "section" + (j+1).toString();
+                    let deactiveSection = document.getElementById(sectionString);
+                    removeClassActive(deactiveSection);
+                }
+            }
             addClassActive(sec);
-        }
-        else{
-            removeClassActive(sec);
         }
     }
 }, {
